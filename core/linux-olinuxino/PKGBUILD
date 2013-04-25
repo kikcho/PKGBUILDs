@@ -7,9 +7,9 @@ buildarch=2
 pkgbase=linux-olinuxino
 pkgname=('linux-olinuxino' 'linux-headers-olinuxino')
 _kernelname=${pkgname#linux}
-_basekernel=3.7
-pkgver=${_basekernel}.2
-pkgrel=3
+_basekernel=3.8
+pkgver=${_basekernel}.11
+pkgrel=1
 arch=('arm')
 url="http://www.kernel.org/"
 license=('GPL2')
@@ -19,20 +19,16 @@ source=("http://www.kernel.org/pub/linux/kernel/v3.0/linux-${_basekernel}.tar.xz
         "ftp://ftp.kernel.org/pub/linux/kernel/v3.x/patch-${pkgver}.bz2"
         'config'
         'change-default-console-loglevel.patch'
-        '0001-ARM-imx23-olinuxino-Add-spi-support.patch'
-        '0001-MXS-imx23-olinuxino-Add-i2c-support.patch'
         '0001-mmc-mxs-mmc-Add-support-for-non-removable-cards.patch'
         '0002-ARM-dts-imx23-olinuxino-Set-the-sdcard-as-non-remova.patch'
-        '0001-rtl8192cu.patch')
-md5sums=('21223369d682bcf44bcdfe1521095983'
-         'b88977838a2a52ff4fb4e82b30726496'
-         '2e55d4387dade59532393a3e882f543f'
+        '0001-MXS-imx23-olinuxino-Add-i2c-support.patch')
+md5sums=('1c738edfc54e7c65faeb90c436104e2f'
+         '623fe384301da601a3026f967b8edffc'
+         '1e338b8d3132e5ff04bcbd516d2be507'
          '9d3c56a4b999c8bfbd4018089a62f662'
-         '13fc27b36015d5a4bd82ce3e6d9d016e'
-         'acc5de524247ec1aff5c9af6a486652f'
          '8a034a737c554cc4ef99ca3854ad56d5'
          'ef27d61a159fa9fcba6e7b93e9f630f2'
-         '3073241240a0536d53408bd94dd5644a')
+         '577525088f68d39f6f4e37319542ff58')
 
 build() {
   cd "${srcdir}/linux-${_basekernel}"
@@ -48,12 +44,10 @@ build() {
   patch -Np1 -i "${srcdir}/change-default-console-loglevel.patch"
 
   # ALARM patches
-  patch -Np1 -i "${srcdir}/0001-ARM-imx23-olinuxino-Add-spi-support.patch"
-  patch -Np1 -i "${srcdir}/0001-MXS-imx23-olinuxino-Add-i2c-support.patch"
-  patch -Np1 -i "${srcdir}/0001-rtl8192cu.patch"
   patch -Np1 -i "${srcdir}/0001-mmc-mxs-mmc-Add-support-for-non-removable-cards.patch"
   patch -Np1 -i "${srcdir}/0002-ARM-dts-imx23-olinuxino-Set-the-sdcard-as-non-remova.patch"
-  
+  patch -Np1 -i "${srcdir}/0001-MXS-imx23-olinuxino-Add-i2c-support.patch"
+
   cat "${srcdir}/config" > ./.config
 
   # set extraversion to pkgrel
@@ -110,7 +104,7 @@ package_linux-olinuxino() {
 
   # install uImage, zImage and DT
   cp arch/$KARCH/boot/uImage "${pkgdir}/boot/uImage"
-  cp arch/$KARCH/boot/imx23-olinuxino.dtb "${pkgdir}/boot/imx23-olinuxino.dtb"
+  cp arch/$KARCH/boot/dts/imx23-olinuxino.dtb "${pkgdir}/boot/imx23-olinuxino.dtb"
 
   # set correct depmod command for install
   sed \
@@ -143,6 +137,8 @@ package_linux-headers-olinuxino() {
   provides=('linux-headers=${pkgver}')
   conflicts=('kernel26-headers-olinuxino')
 
+  KARCH=arm
+
   install -dm755 "${pkgdir}/usr/lib/modules/${_kernver}"
 
   cd "${pkgdir}/usr/lib/modules/${_kernver}"
@@ -168,8 +164,6 @@ package_linux-headers-olinuxino() {
   cp -a arch/$KARCH/include ${pkgdir}/usr/src/linux-${_kernver}/arch/$KARCH/
   mkdir -p ${pkgdir}/usr/src/linux-${_kernver}/arch/$KARCH/mach-mxs
   cp -a arch/$KARCH/mach-mxs/include ${pkgdir}/usr/src/linux-${_kernver}/arch/$KARCH/mach-mxs/
-  mkdir -p ${pkgdir}/usr/src/linux-${_kernver}/arch/$KARCH/plat-mxc
-  cp -a arch/$KARCH/plat-mxc/include ${pkgdir}/usr/src/linux-${_kernver}/arch/$KARCH/plat-mxc/
 
   # copy files necessary for later builds, like nvidia and vmware
   cp Module.symvers "${pkgdir}/usr/src/linux-${_kernver}"
