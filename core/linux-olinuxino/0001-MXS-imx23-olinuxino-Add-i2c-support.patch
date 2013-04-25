@@ -1,4 +1,4 @@
-From 42c43ff981b6de8017354f4a8efd1d8716cf5e4a Mon Sep 17 00:00:00 2001
+From 3ec05a1ed24f49ff0984ba167446d633b0ea1776 Mon Sep 17 00:00:00 2001
 From: Fadil Berisha <f.koliqi@gmail.com>
 Date: Tue, 6 Nov 2012 22:39:46 -0500
 Subject: [PATCH] MXS: imx23-olinuxino: Add i2c support
@@ -7,16 +7,19 @@ imx23-olinuxino board has i2c interface exposed on UEXT connector. This patch ad
 support. Test is done with module MOD-IO2 attached on UEXT connector.
 
 Signed-off-by: Fadil Berisha <f.koliqi@gmail.com>
+
+Conflicts:
+	arch/arm/boot/dts/imx23.dtsi
 ---
- arch/arm/boot/dts/imx23-olinuxino.dts |    6 +++++
- arch/arm/boot/dts/imx23.dtsi          |   43 +++++++++++++++++++++++++++++++--
+ arch/arm/boot/dts/imx23-olinuxino.dts |  6 +++++
+ arch/arm/boot/dts/imx23.dtsi          | 43 +++++++++++++++++++++++++++++++++--
  2 files changed, 47 insertions(+), 2 deletions(-)
 
 diff --git a/arch/arm/boot/dts/imx23-olinuxino.dts b/arch/arm/boot/dts/imx23-olinuxino.dts
-index 384d8b6..764d994 100644
+index e7484e4..b6fdc80 100644
 --- a/arch/arm/boot/dts/imx23-olinuxino.dts
 +++ b/arch/arm/boot/dts/imx23-olinuxino.dts
-@@ -50,6 +50,12 @@
+@@ -68,6 +68,12 @@
  		};
  
  		apbx@80040000 {
@@ -30,12 +33,12 @@ index 384d8b6..764d994 100644
  				pinctrl-names = "default";
  				pinctrl-0 = <&duart_pins_a>;
 diff --git a/arch/arm/boot/dts/imx23.dtsi b/arch/arm/boot/dts/imx23.dtsi
-index 6d31aa3..04f8bd1 100644
+index 65415c5..0cf52b7 100644
 --- a/arch/arm/boot/dts/imx23.dtsi
 +++ b/arch/arm/boot/dts/imx23.dtsi
-@@ -279,6 +279,39 @@
+@@ -292,6 +292,39 @@
  					fsl,voltage = <1>;
- 					fsl,pull-up = <0>;
+ 					fsl,pull-up = <1>;
  				};
 +
 +				i2c0_pins_a: i2c0@0 {
@@ -73,7 +76,7 @@ index 6d31aa3..04f8bd1 100644
  			};
  
  			digctl@8001c000 {
-@@ -337,7 +370,7 @@
+@@ -350,7 +383,7 @@
  				reg = <0x80038000 0x2000>;
  				status = "disabled";
  			};
@@ -82,7 +85,7 @@ index 6d31aa3..04f8bd1 100644
  
  		apbx@80040000 {
  			compatible = "simple-bus";
-@@ -387,8 +420,14 @@
+@@ -400,8 +433,14 @@
  				status = "disabled";
  			};
  
@@ -90,7 +93,7 @@ index 6d31aa3..04f8bd1 100644
 +			i2c0: i2c@80058000 {
 +				#address-cells = <1>;
 +				#size-cells = <0>;
-+				compatible = "fsl,imx28-i2c";
++				compatible = "fsl,imx23-i2c";
  				reg = <0x80058000 0x2000>;
 +				interrupts = <27 26>;
 +				clock-frequency = <100000>;
@@ -99,5 +102,5 @@ index 6d31aa3..04f8bd1 100644
  			};
  
 -- 
-1.7.10
+1.8.2.2
 
