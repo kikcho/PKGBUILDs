@@ -1,0 +1,37 @@
+# Contributor: Kiril Zyapkov <kiril.zyapkov at gmail>
+
+# U-Boot for i.MX233-OLinuXino
+
+pkgname=uboot-olinuxino-git
+pkgdesc="U-Boot for i.MX233-OLinuXino"
+pkgver=2013.05.20158.d782c1f+
+pkgver() {
+  cd "$srcdir/$pkgname"
+  echo $(date -u +%Y.%m).$(git rev-list --count master).$(git rev-parse --short master)+
+}
+pkgrel=1
+arch=('arm')
+license=('GPL' 'LGPL')
+provides=('uboot-olinuxino')
+conflicts=('uboot-olinuxino')
+depends=('coreutils')
+makedepends=('git' 'elftosb')
+install=uboot-olinuxino-git.install
+options=('!strip')
+source=('0001-Add-generic-and-ext4-commands-adjust-boot-environmen.patch'
+        "$pkgname::git://git.denx.de/u-boot-imx.git#branch=master")
+md5sums=('029ddfe57d360f3dd7930c5a1eb9514b'
+         'SKIP')
+
+build() {
+  cd "$srcdir/$pkgname"
+  patch -Np1 -i "${srcdir}/0001-Add-generic-and-ext4-commands-adjust-boot-environmen.patch"
+  make distclean
+  make mx23_olinuxino_config
+  make u-boot.sb
+}
+
+package() {
+  mkdir -p "${pkgdir}/opt/uboot-olinuxino"
+  cp "$srcdir/$pkgname/u-boot.sb" "${pkgdir}/opt/uboot-olinuxino"
+}
