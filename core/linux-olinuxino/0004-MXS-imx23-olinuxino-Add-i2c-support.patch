@@ -1,7 +1,7 @@
-From 3ec05a1ed24f49ff0984ba167446d633b0ea1776 Mon Sep 17 00:00:00 2001
+From 1998ff484c3e86e96c164d769149ef294963a521 Mon Sep 17 00:00:00 2001
 From: Fadil Berisha <f.koliqi@gmail.com>
 Date: Tue, 6 Nov 2012 22:39:46 -0500
-Subject: [PATCH] MXS: imx23-olinuxino: Add i2c support
+Subject: [PATCH 4/4] MXS: imx23-olinuxino: Add i2c support
 
 imx23-olinuxino board has i2c interface exposed on UEXT connector. This patch add i2c
 support. Test is done with module MOD-IO2 attached on UEXT connector.
@@ -12,14 +12,14 @@ Conflicts:
 	arch/arm/boot/dts/imx23.dtsi
 ---
  arch/arm/boot/dts/imx23-olinuxino.dts |  6 +++++
- arch/arm/boot/dts/imx23.dtsi          | 43 +++++++++++++++++++++++++++++++++--
- 2 files changed, 47 insertions(+), 2 deletions(-)
+ arch/arm/boot/dts/imx23.dtsi          | 41 ++++++++++++++++++++++++++++++++++-
+ 2 files changed, 46 insertions(+), 1 deletion(-)
 
 diff --git a/arch/arm/boot/dts/imx23-olinuxino.dts b/arch/arm/boot/dts/imx23-olinuxino.dts
-index e7484e4..b6fdc80 100644
+index 03f55c2..32032d8 100644
 --- a/arch/arm/boot/dts/imx23-olinuxino.dts
 +++ b/arch/arm/boot/dts/imx23-olinuxino.dts
-@@ -68,6 +68,12 @@
+@@ -69,6 +69,12 @@
  		};
  
  		apbx@80040000 {
@@ -33,7 +33,7 @@ index e7484e4..b6fdc80 100644
  				pinctrl-names = "default";
  				pinctrl-0 = <&duart_pins_a>;
 diff --git a/arch/arm/boot/dts/imx23.dtsi b/arch/arm/boot/dts/imx23.dtsi
-index 65415c5..0cf52b7 100644
+index 56afcf4..b94c450 100644
 --- a/arch/arm/boot/dts/imx23.dtsi
 +++ b/arch/arm/boot/dts/imx23.dtsi
 @@ -292,6 +292,39 @@
@@ -76,16 +76,7 @@ index 65415c5..0cf52b7 100644
  			};
  
  			digctl@8001c000 {
-@@ -350,7 +383,7 @@
- 				reg = <0x80038000 0x2000>;
- 				status = "disabled";
- 			};
--                };
-+		};
- 
- 		apbx@80040000 {
- 			compatible = "simple-bus";
-@@ -400,8 +433,14 @@
+@@ -402,8 +435,14 @@
  				status = "disabled";
  			};
  

@@ -1,14 +1,14 @@
-From 5a70382dd43a27ae4bc8d8d6af5f7341828f23ad Mon Sep 17 00:00:00 2001
+From ea34aeb97aab2e8b4a2b8c36da0b49882cd7e881 Mon Sep 17 00:00:00 2001
 From: Alexandre Pereira da Silva <aletes.xgr@gmail.com>
 Date: Fri, 5 Apr 2013 01:18:38 -0300
-Subject: [PATCH 1/2] mmc: mxs-mmc: Add support for non-removable cards
+Subject: [PATCH 2/4] mmc: mxs-mmc: Add support for non-removable cards
 
 Some boards and card slots doesn't have card detect feature available.
 In that case allow to mark the cards as non-removable, via devicetree.
 
 Signed-off-by: Alexandre Pereira da Silva <aletes.xgr@gmail.com>
 ---
- drivers/mmc/host/mxs-mmc.c |    6 ++++++
+ drivers/mmc/host/mxs-mmc.c | 6 ++++++
  1 file changed, 6 insertions(+)
 
 diff --git a/drivers/mmc/host/mxs-mmc.c b/drivers/mmc/host/mxs-mmc.c
@@ -36,5 +36,5 @@ index 4efe302..7d2cd74 100644
  	mmc->f_max = 288000000;
  	mmc->ocr_avail = MMC_VDD_32_33 | MMC_VDD_33_34;
 -- 
-1.7.10.4
+1.8.2.2
 

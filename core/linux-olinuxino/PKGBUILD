@@ -7,8 +7,8 @@ buildarch=2
 pkgbase=linux-olinuxino
 pkgname=('linux-olinuxino' 'linux-headers-olinuxino')
 _kernelname=${pkgname#linux}
-_basekernel=3.8
-pkgver=${_basekernel}.11
+_basekernel=3.9
+pkgver=${_basekernel}.1
 pkgrel=1
 arch=('arm')
 url="http://www.kernel.org/"
@@ -19,16 +19,18 @@ source=("http://www.kernel.org/pub/linux/kernel/v3.0/linux-${_basekernel}.tar.xz
         "ftp://ftp.kernel.org/pub/linux/kernel/v3.x/patch-${pkgver}.bz2"
         'config'
         'change-default-console-loglevel.patch'
-        '0001-mmc-mxs-mmc-Add-support-for-non-removable-cards.patch'
-        '0002-ARM-dts-imx23-olinuxino-Set-the-sdcard-as-non-remova.patch'
-        '0001-MXS-imx23-olinuxino-Add-i2c-support.patch')
-md5sums=('1c738edfc54e7c65faeb90c436104e2f'
-         '623fe384301da601a3026f967b8edffc'
-         '1e338b8d3132e5ff04bcbd516d2be507'
+        '0001-ARM-dts-imx23-olinuxino-Set-the-sdcard-as-non-remova.patch'
+        '0002-mmc-mxs-mmc-Add-support-for-non-removable-cards.patch'
+        '0003-I2C-MXS-Fix-timeout-issues-on-imx23.patch'
+        '0004-MXS-imx23-olinuxino-Add-i2c-support.patch')
+md5sums=('4348c9b6b2eb3144d601e87c19d5d909'
+         '7da8899fd5e0fbe0cb24310e5b8d975d'
+         '70784b194fc71c6f76db378df776cdef'
          '9d3c56a4b999c8bfbd4018089a62f662'
-         '8a034a737c554cc4ef99ca3854ad56d5'
-         'ef27d61a159fa9fcba6e7b93e9f630f2'
-         '577525088f68d39f6f4e37319542ff58')
+         'e93dd7bf64bcc98b9009eea2605788d3'
+         'c14b8e2261b8d68695264990a8bb1bb4'
+         '080ecb8374b2ab307e4233c2aabf3f86'
+         '174a3c41db711e0a9b9d8b8b734cb532')
 
 build() {
   cd "${srcdir}/linux-${_basekernel}"
@@ -44,9 +46,10 @@ build() {
   patch -Np1 -i "${srcdir}/change-default-console-loglevel.patch"
 
   # ALARM patches
-  patch -Np1 -i "${srcdir}/0001-mmc-mxs-mmc-Add-support-for-non-removable-cards.patch"
-  patch -Np1 -i "${srcdir}/0002-ARM-dts-imx23-olinuxino-Set-the-sdcard-as-non-remova.patch"
-  patch -Np1 -i "${srcdir}/0001-MXS-imx23-olinuxino-Add-i2c-support.patch"
+  patch -Np1 -i "${srcdir}/0001-ARM-dts-imx23-olinuxino-Set-the-sdcard-as-non-remova.patch"
+  patch -Np1 -i "${srcdir}/0002-mmc-mxs-mmc-Add-support-for-non-removable-cards.patch"
+  patch -Np1 -i "${srcdir}/0003-I2C-MXS-Fix-timeout-issues-on-imx23.patch"
+  patch -Np1 -i "${srcdir}/0004-MXS-imx23-olinuxino-Add-i2c-support.patch"
 
   cat "${srcdir}/config" > ./.config
 
@@ -136,8 +139,6 @@ package_linux-headers-olinuxino() {
   pkgdesc="Header files and scripts for building modules for linux kernel - i.MX233 OLinuXino"
   provides=('linux-headers=${pkgver}')
   conflicts=('kernel26-headers-olinuxino')
-
-  KARCH=arm
 
   install -dm755 "${pkgdir}/usr/lib/modules/${_kernver}"
 
